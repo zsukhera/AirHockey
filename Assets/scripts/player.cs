@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class player : MonoBehaviour
 {
+
+
+    [Header("Audio Manager")]
+    public GameObject audioManager;
+
     [Header("Input Settings")]
     [SerializeField] private bool useTouchInput = false; // Toggle between mouse and touch
 
@@ -13,12 +18,22 @@ public class player : MonoBehaviour
     [SerializeField] private Vector2 movementBoundsMax = new Vector2(5f, 8f);
     [SerializeField] private float maxSpeed = 20f;
 
+    [Header("Movement Bounds")]
+    [SerializeField] private GameObject halfLine;
+    [SerializeField] private GameObject leftWall;
+    [SerializeField] private GameObject rightWall;
+    [SerializeField] private GameObject topWall;
+    [SerializeField] private GameObject bottomWall;
+
+    [SerializeField] private bool isTopPlayer = false;
+
     [Header("Physics")]
     [SerializeField] private float friction = 0.95f; // Velocity damping
 
     [Header("Puck Interaction")]
     [SerializeField] private float puckHitForce = 15f;
     [SerializeField] private float puckHitRadius = 1f;
+    [SerializeField] private float maxHitForce = 30f;
 
     private Rigidbody2D rb;
     private CircleCollider2D circleCollider;
@@ -28,7 +43,7 @@ public class player : MonoBehaviour
     private Vector2 dragStartPos;
     private Vector3 dragStartWorldPos;
 
-    private void Start()
+    public void Start()
     {
         // Get components
         rb = GetComponent<Rigidbody2D>();
@@ -44,13 +59,33 @@ public class player : MonoBehaviour
         }
 
         lastPosition = transform.position;
-
+        audioManager = GameObject.Find("audioManager");
         // Auto-detect input method based on platform
 #if UNITY_EDITOR
         useTouchInput = false; // Use mouse in editor
 #elif UNITY_ANDROID || UNITY_IOS
             useTouchInput = true; // Use touch on mobile
 #endif
+
+        if (halfLine != null)
+        {
+            float centreY = halfLine.transform.position.y;
+            float leftX = leftWall.GetComponent<BoxCollider2D>().bounds.max.x;
+            float rightX = rightWall.GetComponent<BoxCollider2D>().bounds.min.x;
+
+            float topY = topWall.GetComponent<BoxCollider2D>().bounds.min.y;
+            float bottomY = bottomWall.GetComponent<BoxCollider2D>().bounds.max.y;
+            if (isTopPlayer)
+            {
+                movementBoundsMin = new Vector2(leftX, centreY);
+                movementBoundsMax = new Vector2(rightX, topY);
+            }
+            else
+            {
+                movementBoundsMin = new Vector2(leftX, bottomY);
+                movementBoundsMax = new Vector2(rightX, centreY);
+            }
+        }
     }
 
     private void Update()
@@ -112,9 +147,10 @@ public class player : MonoBehaviour
         if (collision.gameObject.CompareTag("puck"))
         {
             ApplyForceToPuck(collision.gameObject);
+            audioManager.gameObject.GetComponent<audioManager>().playHitSound();
         }
     }
-
+    
     private void ApplyForceToPuck(GameObject puck)
     {
         Rigidbody2D puckRb = puck.GetComponent<Rigidbody2D>();
@@ -125,7 +161,7 @@ public class player : MonoBehaviour
             puckRb.AddForce(direction * puckHitForce, ForceMode2D.Impulse);
         }
     }
-
+    
     /// <summary>
     /// Handle touch input for Android/iOS devices
     /// </summary>

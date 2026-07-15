@@ -7,6 +7,10 @@ TagManager:
   - audioManager
   - puck
   - goal
+  - halfLine
+  - player1
+  - player2
+  - opponent
   layers:
   - Default
   - TransparentFX
