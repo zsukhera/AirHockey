@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class goal : MonoBehaviour
 {
-
     public GameObject audioManager;
     // Start is called before the first frame update
     void Start()
@@ -17,6 +16,7 @@ public class goal : MonoBehaviour
     {
         
     }
+
 
     public void OnTriggerEnter2D(Collider2D collision)
     {

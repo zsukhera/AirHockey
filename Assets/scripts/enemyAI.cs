@@ -33,6 +33,11 @@ public class enemyAI : MonoBehaviour
     [Header("Puck Interaction")]
     [SerializeField] private float puckHitForce = 15f;
 
+    [SerializeField] private float hitDistance = 1.2f;
+    [SerializeField] private float hitCooldown = 0.5f;
+
+    private float nextHitTime;
+
     private Rigidbody2D rb;
 
     private Vector2 movementBoundsMin;
@@ -71,9 +76,43 @@ public class enemyAI : MonoBehaviour
         }
         
         CheckPuckMovement();
+        engagePuck();
         MoveTowardsTarget();
 
         currentVelocity *= friction;
+    }
+    //checks if the puck velocity is below 3
+    //if it is, then the enemy player moves toward the puck, causing a hit
+    void engagePuck()
+    {
+        // Only hit if cooldown has passed
+        if (Time.time < nextHitTime)
+            return;
+
+        float distance = Vector2.Distance(transform.position, puck.position);
+
+        // Check if AI is close enough to hit
+        if (distance <= hitDistance)
+        {
+            nextHitTime = Time.time + hitCooldown;
+
+            Vector2 hitDirection;
+
+            // Aim toward player's side (downwards)
+            hitDirection = Vector2.down;
+
+            // Add difficulty-based aiming error
+            hitDirection += Random.insideUnitCircle * aimingError;
+
+            hitDirection.Normalize();
+
+            puckRB.AddForce(
+                hitDirection * puckHitForce,
+                ForceMode2D.Impulse
+            );
+
+            audioManager.GetComponent<audioManager>().playHitSound();
+        }
     }
 
     void FixedUpdate()

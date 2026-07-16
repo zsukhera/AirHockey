@@ -104,6 +104,8 @@ public class player : MonoBehaviour
         currentVelocity *= friction;
     }
 
+   
+
     private void FixedUpdate()
     {
         // Apply velocity to rigidbody
