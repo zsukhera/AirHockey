@@ -749,6 +749,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: wall (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 3609678302843998292, guid: 1858e8a2a52162d46aa6a0e1b4396d96, type: 3}
+      propertyPath: m_TagString
+      value: rightWall
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -955,6 +959,37 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1312878402235459853, guid: 9a8a779936d4dff4faa8dfb19f6f50a1, type: 3}
   m_PrefabInstance: {fileID: 1497954861116868167}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1050389240
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1050389241}
+  m_Layer: 0
+  m_Name: respawnPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 2974397684917235467, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1050389241
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1050389240}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.15, y: 0.25, z: -9.95848}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1098298066
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1154,6 +1189,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   leftWall: {fileID: 1176176809}
   rightWall: {fileID: 1153476825}
+  respawnPoint: {fileID: 1050389241}
 --- !u!1 &1313267517
 GameObject:
   m_ObjectHideFlags: 0
@@ -1733,6 +1769,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: wall
       objectReference: {fileID: 0}
+    - target: {fileID: 3609678302843998292, guid: 1858e8a2a52162d46aa6a0e1b4396d96, type: 3}
+      propertyPath: m_TagString
+      value: leftWall
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1750,3 +1790,4 @@ SceneRoots:
   - {fileID: 1681961251}
   - {fileID: 137238179}
   - {fileID: 1427216016}
+  - {fileID: 1050389241}
