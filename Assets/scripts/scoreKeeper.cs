@@ -12,7 +12,7 @@ public class scoreKeeper : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        Debug.Log("scorekeeper aoa");
     }
 
     // Update is called once per frame
