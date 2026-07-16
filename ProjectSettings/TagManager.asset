@@ -11,8 +11,6 @@ TagManager:
   - player1
   - player2
   - opponent
-  - leftWall
-  - rightWall
   layers:
   - Default
   - TransparentFX
