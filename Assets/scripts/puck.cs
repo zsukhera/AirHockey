@@ -15,13 +15,20 @@ public class puck : MonoBehaviour
 
     void Start()
     {
+        // Find walls using tags
+        leftWall = GameObject.FindWithTag("leftWall");
+        rightWall = GameObject.FindWithTag("rightWall");
+
+        if (leftWall == null || rightWall == null)
+        {
+            Debug.LogError("Walls not found! Make sure leftWall and rightWall objects have the correct tags.");
+            return;
+        }
+
         circleCollider = GetComponent<CircleCollider2D>();
+
         float leftX = leftWall.GetComponent<BoxCollider2D>().bounds.max.x;
         float rightX = rightWall.GetComponent<BoxCollider2D>().bounds.min.x;
-
-        //float topY = topWall.GetComponent<BoxCollider2D>().bounds.min.y;
-        //float bottomY = bottomWall.GetComponent<BoxCollider2D>().bounds.max.y;
-
 
         // Keep the entire puck inside the left/right walls
         float radius = circleCollider.radius * transform.lossyScale.x;
