@@ -6,6 +6,9 @@ public class puck : MonoBehaviour
     [Header("Boundaries")]
     [SerializeField] public GameObject leftWall;
     [SerializeField] public GameObject rightWall;
+
+    public scoreKeeper scoreKeeper;
+
     //[SerializeField] public GameObject topWall;
     //[SerializeField] public GameObject bottomWall;
     public Transform respawnPoint;
@@ -25,7 +28,7 @@ public class puck : MonoBehaviour
             Debug.LogError("Walls not found! Make sure leftWall and rightWall objects have the correct tags.");
             return;
         }
-
+        scoreKeeper = FindObjectOfType<scoreKeeper>();
         circleCollider = GetComponent<CircleCollider2D>();
 
         float leftX = leftWall.GetComponent<BoxCollider2D>().bounds.max.x;
@@ -68,9 +71,26 @@ public class puck : MonoBehaviour
     IEnumerator waitThenRespawn(int time)
     {
         yield return new WaitForSeconds(time);
-        gameObject.transform.position = respawnPoint.position;
+
+        transform.position = respawnPoint.position;
+
         Rigidbody2D rb = GetComponent<Rigidbody2D>();
         rb.velocity = Vector2.zero;
+        rb.angularVelocity = 0f;
+
+        scoreKeeper.resumeTimer();
     }
 
+    //called by the score keeper 
+    //when the game is over and the puck is meant to be frozen 
+    //the puck is placed at the centre and the rigid body is disabled
+    public void freezePuck()
+    {
+        Rigidbody2D rb = GetComponent<Rigidbody2D>();
+        StopAllCoroutines();          // Cancel any pending respawn
+        transform.position = respawnPoint.position;
+        rb.velocity = Vector2.zero;
+        rb.angularVelocity = 0f;
+        rb.simulated = false;         // Freeze the puck completely
+    }
 }

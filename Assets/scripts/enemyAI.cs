@@ -54,33 +54,57 @@ public class enemyAI : MonoBehaviour
     private float predictionTime;
 
     private float nextReaction;
-
+    public bool inputEnabled = true;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
 
         SetupDifficulty();
         SetupBounds();
-
+        enableInput();
         homePosition = transform.position;
+        targetPosition = transform.position;
+    }
+    public void enableInput()
+    {
+        inputEnabled = true;
+
+        currentVelocity = Vector2.zero;
+        rb.velocity = Vector2.zero;
+
         targetPosition = transform.position;
     }
 
     void Update()
     {
+        if (!inputEnabled)
+        {
+            currentVelocity *= friction;
+            return;
+        }
+
         if (Time.time >= nextReaction)
         {
             nextReaction = Time.time + reactionDelay;
-
             DecideTarget();
         }
-        
+
         CheckPuckMovement();
         engagePuck();
         MoveTowardsTarget();
-
         currentVelocity *= friction;
     }
+
+    public void disableInput()
+    {
+        inputEnabled = false;
+
+        currentVelocity = Vector2.zero;
+        rb.velocity = Vector2.zero;
+
+        targetPosition = transform.position;
+    }
+
     //checks if the puck velocity is below 3
     //if it is, then the enemy player moves toward the puck, causing a hit
     void engagePuck()

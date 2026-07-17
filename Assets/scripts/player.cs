@@ -43,6 +43,7 @@ public class player : MonoBehaviour
     private Vector2 dragStartPos;
     private Vector3 dragStartWorldPos;
 
+    public bool inputEnabled = true;
     public void Start()
     {
         // Get components
@@ -60,6 +61,7 @@ public class player : MonoBehaviour
 
         lastPosition = transform.position;
         audioManager = GameObject.Find("audioManager");
+        EnableInput();
         // Auto-detect input method based on platform
 #if UNITY_EDITOR
         useTouchInput = false; // Use mouse in editor
@@ -90,21 +92,17 @@ public class player : MonoBehaviour
 
     private void Update()
     {
-        // Handle input based on selected method
-        if (useTouchInput)
+        if (inputEnabled)
         {
-            HandleTouchInput();
+            if (useTouchInput)
+                HandleTouchInput();
+            else
+                HandleMouseInput();
         }
-        else
-        {
-            HandleMouseInput();
-        }
-
-        // Apply friction to velocity
         currentVelocity *= friction;
     }
 
-   
+
 
     private void FixedUpdate()
     {
@@ -316,5 +314,21 @@ public class player : MonoBehaviour
         currentVelocity = Vector2.zero;
         rb.velocity = Vector2.zero;
         isDragging = false;
+    }
+
+
+    //will be called by the score keeper to disable the input of the player
+    public void disableInput()
+    {
+        inputEnabled = false;
+        isDragging = false;
+        currentVelocity = Vector2.zero;
+        rb.velocity = Vector2.zero;
+    }
+
+    //we shall figure out when to call this :) 
+    public void EnableInput()
+    {
+        inputEnabled = true;
     }
 }
