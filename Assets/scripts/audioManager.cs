@@ -1,35 +1,45 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class audioManager : MonoBehaviour
 {
+    public static audioManager Instance;
+
     public AudioSource audioSource;
-    [SerializeField]
-    [Header("AudioClips")]
+
+    [Header("Audio Clips")]
     public AudioClip hitSound;
     public AudioClip goalSound;
-    // Start is called before the first frame update
-    void Start()
+
+    public AudioMixer mixer;
+
+    private void Awake()
     {
+        // If another AudioManager already exists, destroy this one.
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+
         audioSource = GetComponent<AudioSource>();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void SetMusicVolume(float volume)
     {
-        
+        mixer.SetFloat("MusicVolume", Mathf.Log10(Mathf.Max(volume, 0.0001f)) * 20);
     }
 
     public void playHitSound()
     {
-        audioSource.PlayOneShot(hitSound,25);
+        audioSource.PlayOneShot(hitSound, 1f);
     }
 
-    
     public void playGoalSound()
     {
         audioSource.PlayOneShot(goalSound);
     }
-    
 }
