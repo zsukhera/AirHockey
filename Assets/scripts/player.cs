@@ -8,7 +8,7 @@ public class player : MonoBehaviour
 
     [Header("Audio Manager")]
     public GameObject audioManager;
-
+    public sfxManager sfxManager;
     [Header("Input Settings")]
     [SerializeField] private bool useTouchInput = false; // Toggle between mouse and touch
 
@@ -147,7 +147,8 @@ public class player : MonoBehaviour
         if (collision.gameObject.CompareTag("puck"))
         {
             ApplyForceToPuck(collision.gameObject);
-            audioManager.gameObject.GetComponent<audioManager>().playHitSound();
+            //audioManager.gameObject.GetComponent<audioManager>().playHitSound();
+            sfxManager.playHitSound();
         }
     }
     

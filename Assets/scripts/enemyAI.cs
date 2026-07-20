@@ -12,7 +12,7 @@ public class enemyAI : MonoBehaviour
 
     [Header("Audio Manager")]
     public GameObject audioManager;
-
+    public sfxManager sfxManager;
     [Header("AI")]
     [SerializeField] private Difficulty difficulty = Difficulty.Medium;
     [SerializeField] private Transform puck;
@@ -135,7 +135,8 @@ public class enemyAI : MonoBehaviour
                 ForceMode2D.Impulse
             );
 
-            audioManager.GetComponent<audioManager>().playHitSound();
+            //audioManager.GetComponent<audioManager>().playHitSound();
+            sfxManager.playHitSound();
         }
     }
 
@@ -243,7 +244,8 @@ public class enemyAI : MonoBehaviour
         {
             Rigidbody2D puckRigidBody =
                 collision.gameObject.GetComponent<Rigidbody2D>();
-            audioManager.GetComponent<audioManager>().playHitSound();
+            //audioManager.GetComponent<audioManager>().playHitSound();
+            sfxManager.playHitSound();
             if (puckRigidBody != null)
             {
                 Vector2 direction =

@@ -6,6 +6,7 @@ public class goal : MonoBehaviour
 {
     public scoreKeeper scoreKeeper;
     public GameObject audioManager;
+    public sfxManager sfxManager;
     // Start is called before the first frame update
     void Start()
     {
@@ -25,7 +26,8 @@ public class goal : MonoBehaviour
     {
         if (collision.CompareTag("puck"))
         {
-            audioManager.GetComponent<audioManager>().playGoalSound();
+            //audioManager.GetComponent<audioManager>().playGoalSound();
+            sfxManager.playGoalSound();
             scoreKeeper.pauseTimer();
         }
     }
