@@ -8,7 +8,8 @@ public class puck : MonoBehaviour
     [SerializeField] public GameObject rightWall;
 
     public scoreKeeper scoreKeeper;
-
+    public GameObject player;
+    public GameObject opponent;
     //[SerializeField] public GameObject topWall;
     //[SerializeField] public GameObject bottomWall;
     public Transform respawnPoint;
@@ -50,6 +51,8 @@ public class puck : MonoBehaviour
         if(collision.gameObject.CompareTag("goal"))
         {
             respawn();
+            player.GetComponent<player>().enabled = true;
+            opponent.GetComponent<enemyAI>().enabled = true;
         }
     }
 
@@ -65,10 +68,12 @@ public class puck : MonoBehaviour
 
     public void respawn()
     {
-        StartCoroutine(waitThenRespawn(2));
+        //the players have to be brought back 
+
+        StartCoroutine(waitThenRespawn(0.25f));
     }
 
-    IEnumerator waitThenRespawn(int time)
+    IEnumerator waitThenRespawn(float time)
     {
         yield return new WaitForSeconds(time);
 

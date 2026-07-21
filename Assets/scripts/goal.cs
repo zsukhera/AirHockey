@@ -6,6 +6,8 @@ public class goal : MonoBehaviour
 {
     public scoreKeeper scoreKeeper;
     public GameObject audioManager;
+    public GameObject player;
+    public GameObject opponent; 
     public sfxManager sfxManager;
     // Start is called before the first frame update
     void Start()
@@ -29,6 +31,10 @@ public class goal : MonoBehaviour
             //audioManager.GetComponent<audioManager>().playGoalSound();
             sfxManager.playGoalSound();
             scoreKeeper.pauseTimer();
+            //disable player and opponent movement
+            player.GetComponent<player>().enabled = false;
+            opponent.GetComponent<enemyAI>().enabled = false;
+            //collision.gameObject.SetActive(false); //uncomment for disaster
         }
     }
 }

@@ -158,7 +158,7 @@ public class enemyAI : MonoBehaviour
 
             case Difficulty.Medium:
                 moveSpeed = 5f;
-                reactionDelay = 0.15f;
+                reactionDelay = 0.25f;
                 aimingError = 0.3f;
                 predictionTime = 0.2f;
                 break;
