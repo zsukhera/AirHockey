@@ -9,7 +9,7 @@ public class enemyAI : MonoBehaviour
         Hard
     }
 
-
+    
     [Header("Audio Manager")]
     public GameObject audioManager;
     public sfxManager sfxManager;
@@ -65,6 +65,7 @@ public class enemyAI : MonoBehaviour
         homePosition = transform.position;
         targetPosition = transform.position;
     }
+
     public void enableInput()
     {
         inputEnabled = true;

@@ -32,8 +32,8 @@ public class goal : MonoBehaviour
             sfxManager.playGoalSound();
             scoreKeeper.pauseTimer();
             //disable player and opponent movement
-            player.GetComponent<player>().enabled = false;
-            opponent.GetComponent<enemyAI>().enabled = false;
+            player.GetComponent<player>().disableInput();
+            opponent.GetComponent<enemyAI>().disableInput(); ;
             //collision.gameObject.SetActive(false); //uncomment for disaster
         }
     }

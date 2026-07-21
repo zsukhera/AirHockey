@@ -17,7 +17,7 @@ public class puck : MonoBehaviour
     private Vector2 movementBoundsMax;
 
     private CircleCollider2D circleCollider;
-
+    
     void Start()
     {
         // Find walls using tags
@@ -51,8 +51,6 @@ public class puck : MonoBehaviour
         if(collision.gameObject.CompareTag("goal"))
         {
             respawn();
-            player.GetComponent<player>().enabled = true;
-            opponent.GetComponent<enemyAI>().enabled = true;
         }
     }
 
@@ -71,6 +69,7 @@ public class puck : MonoBehaviour
         //the players have to be brought back 
 
         StartCoroutine(waitThenRespawn(0.25f));
+
     }
 
     IEnumerator waitThenRespawn(float time)
@@ -83,6 +82,8 @@ public class puck : MonoBehaviour
         rb.velocity = Vector2.zero;
         rb.angularVelocity = 0f;
 
+        player.GetComponent<player>().EnableInput();
+        opponent.GetComponent<enemyAI>().enableInput();
         scoreKeeper.resumeTimer();
     }
 
