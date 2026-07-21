@@ -328,6 +328,7 @@ public class player : MonoBehaviour
     }
 
     //we shall figure out when to call this :) 
+    //update: we have figured it out
     public void EnableInput()
     {
         inputEnabled = true;

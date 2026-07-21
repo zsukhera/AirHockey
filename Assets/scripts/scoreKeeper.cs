@@ -11,6 +11,9 @@ public class scoreKeeper : MonoBehaviour
     public TMP_Text enemyScore;
     public TMP_Text timer;
     public int gameTime=90;
+    [SerializeField] private GameMode gameMode = GameMode.SinglePlayer;
+    [Header("Status Message")]
+    [SerializeField] private TMP_Text statusMessage;   
     private float currentTime;
     private int playerScoreValue = 0;
     private int enemyScoreValue = 0;
@@ -26,7 +29,22 @@ public class scoreKeeper : MonoBehaviour
     {
         currentTime = gameTime;
         timer.text = currentTime.ToString();
+
         gameOverPanel.SetActive(false);
+
+        if (statusMessage != null)
+            statusMessage.text = ""; 
+    }
+    public void ShowMessage(string message)
+    {
+        if (statusMessage != null)
+            statusMessage.text = message;
+    }
+
+    public void ClearMessage()
+    {
+        if (statusMessage != null)
+            statusMessage.text = "";
     }
 
     // Update is called once per frame
@@ -62,7 +80,22 @@ public class scoreKeeper : MonoBehaviour
 
                 // Disable player input
                 player.GetComponent<player>().disableInput();
-                opponent.GetComponent<enemyAI>().disableInput();
+
+                switch (gameMode)
+                {
+                    case GameMode.SinglePlayer:
+                        opponent.GetComponent<enemyAI>().disableInput();
+                        break;
+
+                    case GameMode.LocalMultiplayer:
+                        opponent.GetComponent<player>().disableInput();
+                        break;
+
+                    case GameMode.Online:
+                        // Disable only the local player.
+                        // Add networking logic here later.
+                        break;
+                }
 
                 // Freeze the puck
                 puck.GetComponent<puck>().freezePuck();
@@ -71,12 +104,35 @@ public class scoreKeeper : MonoBehaviour
                 gameOverPanel.SetActive(true);
 
                 // Decide winner
-                if (playerScoreValue > enemyScoreValue)
-                    resultText.text = "You Win!";
-                else if (enemyScoreValue > playerScoreValue)
-                    resultText.text = "The Computer Won!";
-                else
-                    resultText.text = "It's a Draw!";
+                switch (gameMode)
+                {
+                    case GameMode.SinglePlayer:
+                        if (playerScoreValue > enemyScoreValue)
+                            resultText.text = "You Win!";
+                        else if (enemyScoreValue > playerScoreValue)
+                            resultText.text = "Computer Wins!";
+                        else
+                            resultText.text = "It's a Draw!";
+                        break;
+
+                    case GameMode.LocalMultiplayer:
+                        if (playerScoreValue > enemyScoreValue)
+                            resultText.text = "White Wins!";
+                        else if (enemyScoreValue > playerScoreValue)
+                            resultText.text = "Blue Wins!";
+                        else
+                            resultText.text = "It's a Draw!";
+                        break;
+
+                    case GameMode.Online:
+                        if (playerScoreValue > enemyScoreValue)
+                            resultText.text = "Player 1 Wins!";
+                        else if (enemyScoreValue > playerScoreValue)
+                            resultText.text = "Player 2 Wins!";
+                        else
+                            resultText.text = "It's a Draw!";
+                        break;
+                }
             }
         }
 

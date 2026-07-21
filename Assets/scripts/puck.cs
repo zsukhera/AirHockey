@@ -1,12 +1,13 @@
 using System.Collections;
 using UnityEngine;
 
+
 public class puck : MonoBehaviour
 {
     [Header("Boundaries")]
     [SerializeField] public GameObject leftWall;
     [SerializeField] public GameObject rightWall;
-
+    [SerializeField] private GameMode gameMode = GameMode.SinglePlayer;
     public scoreKeeper scoreKeeper;
     public GameObject player;
     public GameObject opponent;
@@ -82,8 +83,23 @@ public class puck : MonoBehaviour
         rb.velocity = Vector2.zero;
         rb.angularVelocity = 0f;
 
-        player.GetComponent<player>().EnableInput();
-        opponent.GetComponent<enemyAI>().enableInput();
+        switch (gameMode)
+        {
+            case GameMode.SinglePlayer:
+                player.GetComponent<player>().EnableInput();
+                opponent.GetComponent<enemyAI>().enableInput();
+                break;
+
+            case GameMode.LocalMultiplayer:
+                player.GetComponent<player>().EnableInput();
+                opponent.GetComponent<player>().EnableInput();
+                break;
+
+            case GameMode.Online:
+                // Network code will decide when players can move again.
+                break;
+        }
+
         scoreKeeper.resumeTimer();
     }
 

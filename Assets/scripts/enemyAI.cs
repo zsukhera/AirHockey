@@ -69,10 +69,8 @@ public class enemyAI : MonoBehaviour
     public void enableInput()
     {
         inputEnabled = true;
-
         currentVelocity = Vector2.zero;
         rb.velocity = Vector2.zero;
-
         targetPosition = transform.position;
     }
 
