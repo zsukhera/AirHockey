@@ -579,7 +579,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &693080803
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1477,6 +1477,7 @@ MonoBehaviour:
   audioSource: {fileID: 0}
   hitSound: {fileID: 0}
   goalSound: {fileID: 0}
+  mixer: {fileID: 0}
 --- !u!4 &1868772920
 Transform:
   m_ObjectHideFlags: 0
