@@ -1,15 +1,19 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Fusion;
 using Fusion.Sockets;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
 {
     public static NetworkManager Instance;
     public NetworkRunner Runner;
-
+    private bool matchStarting;
+    public NetworkObject lobbyControllerPrefab;
     private void Awake()
     {
         if (Instance == null)
@@ -21,6 +25,37 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         {
             Destroy(gameObject);
         }
+    }
+    private async void StartMatchCountdown()
+    {
+        Debug.Log("Starting countdown");
+
+        for (int i = 3; i > 0; i--)
+        {
+            if (LobbyManager.Instance != null)
+            {
+                LobbyNetworkController.Instance.RPC_UpdateCountdown(i);
+            }
+
+            await Task.Delay(1000);
+        }
+
+
+        if (LobbyManager.Instance != null)
+        {
+            LobbyNetworkController.Instance.RPC_UpdateCountdown(0);
+        }
+
+
+        await Task.Delay(500);
+
+
+        Debug.Log("Loading gameplay scene");
+
+        await Runner.LoadScene(
+            "Online GamePlay",
+            LoadSceneMode.Single
+        );
     }
 
     public async Task<bool> StartGame(Fusion.GameMode mode, string roomName)
@@ -47,7 +82,10 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         });
 
         Debug.Log($"StartGame Result: {result.Ok}");
-
+        if (result.Ok && mode == Fusion.GameMode.Host)
+        {
+            Runner.Spawn(lobbyControllerPrefab);
+        }
         return result.Ok;
     }
 
@@ -55,6 +93,7 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
     {
         Debug.Log($"Player left: {player}");
     }
+    
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
         Debug.Log($"Player joined: {player}");
@@ -63,7 +102,14 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         {
             LobbyManager.Instance.PlayerJoined(player);
         }
+
+        if (runner.IsServer && runner.ActivePlayers.Count() == 2 && !matchStarting)
+        {
+            matchStarting = true;
+            StartMatchCountdown();
+        }
     }
+
     public async void HostGame()
     {
         bool success = await NetworkManager.Instance.StartGame(Fusion.GameMode.Host, "TestRoom");
@@ -144,6 +190,19 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
     public void OnHostMigration(NetworkRunner runner, HostMigrationToken hostMigrationToken)
     {
         //throw new NotImplementedException();
+    }
+
+    public async void LoadGameScene()
+    {
+        if (Runner.IsServer)
+        {
+            Debug.Log("Loading OnlineGame scene");
+
+            await Runner.LoadScene(
+                "Online GamePlay",
+                LoadSceneMode.Single
+            );
+        }
     }
 
     public void OnSceneLoadDone(NetworkRunner runner)

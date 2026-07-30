@@ -11,7 +11,7 @@ public class LobbyManager : MonoBehaviour
     public static LobbyManager Instance;
     public TMP_Text player1Text;
     public TMP_Text player2Text;
-
+    public TMP_Text countdownText;
     public Button startButton;
 
     private void Awake()
@@ -96,4 +96,26 @@ public class LobbyManager : MonoBehaviour
 
         return code;
     }
+
+    public void StartMatch()
+    {
+        Debug.Log("START MATCH BUTTON PRESSED");
+        NetworkManager.Instance.LoadGameScene();
+    }
+
+    public void UpdateCountdown(int seconds)
+    {
+        if (countdownText != null)
+        {
+            if (seconds > 0)
+            {
+                countdownText.text = "Starting in " + seconds;
+            }
+            else
+            {
+                countdownText.text = "GO!";
+            }
+        }
+    }
+
 }
