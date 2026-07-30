@@ -1925,7 +1925,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 2017540221}
         m_TargetAssemblyTypeName: sceneManager, Assembly-CSharp
         m_MethodName: LoadScene
         m_Mode: 3
@@ -3619,7 +3619,7 @@ MonoBehaviour:
   joinInput: {fileID: 2018615756}
   player1Text: {fileID: 1379573756}
   player2Text: {fileID: 1334950679}
-  startButton: {fileID: 362998848}
+  startButton: {fileID: 362998850}
 --- !u!4 &1651816691
 Transform:
   m_ObjectHideFlags: 0
@@ -4045,6 +4045,7 @@ GameObject:
   - component: {fileID: 2017540220}
   - component: {fileID: 2017540219}
   - component: {fileID: 2017540218}
+  - component: {fileID: 2017540221}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -4126,6 +4127,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2017540221
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2017540217}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 580bcd3cfe2dfb5478706b2cff4b159c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2018615754
 GameObject:
   m_ObjectHideFlags: 0

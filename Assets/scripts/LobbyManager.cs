@@ -12,7 +12,7 @@ public class LobbyManager : MonoBehaviour
     public TMP_Text player1Text;
     public TMP_Text player2Text;
 
-    public GameObject startButton;
+    public Button startButton;
 
     private void Awake()
     {
@@ -30,12 +30,16 @@ public class LobbyManager : MonoBehaviour
             currentRoomCode
         );
 
+        Debug.Log("waitingPanel: " + waitingPanel);
+        Debug.Log("roomCodeText: " + roomCodeText);
+        Debug.Log("startButton: " + startButton);
+
         if (success)
         {
             Debug.Log("Room created successfully!");
             waitingPanel.SetActive(true);
-            roomCodeText.text = "Room Code: " + currentRoomCode;
-            startButton.GetComponent<Button>().interactable = false;
+            roomCodeText.text = "Room Code: " + currentRoomCode; 
+            startButton.interactable = false;
         }
     }
 
@@ -53,7 +57,7 @@ public class LobbyManager : MonoBehaviour
             player2Text.text = "Player 2: Connected";
             if (NetworkManager.Instance.Runner.IsServer)
             {
-                startButton.GetComponent<Button>().interactable = true;
+                startButton.interactable = true;
             }
         }
     }
