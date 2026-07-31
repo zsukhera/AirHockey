@@ -98,6 +98,7 @@ GameObject:
   - component: {fileID: 657568205693264228}
   - component: {fileID: 2998892301340123099}
   - component: {fileID: 5554723882469930039}
+  - component: {fileID: 8838559367510655183}
   m_Layer: 0
   m_Name: PlayerPaddle
   m_TagString: Player
@@ -231,6 +232,7 @@ MonoBehaviour:
   NestedObjects: []
   NetworkedBehaviours:
   - {fileID: 5554723882469930039}
+  - {fileID: 8838559367510655183}
   ForceRemoteRenderTimeframe: 0
 --- !u!114 &5554723882469930039
 MonoBehaviour:
@@ -249,3 +251,16 @@ MonoBehaviour:
   SyncParent: 0
   _autoAOIOverride: 1
   DisableSharedModeInterpolation: 0
+--- !u!114 &8838559367510655183
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2449151898819554820}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3fe5f00fca572384ab6221a8d7fe1419, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 10

@@ -9,10 +9,17 @@ public class PlayerPaddle : NetworkBehaviour
 
     public override void Spawned()
     {
+        Debug.Log(
+            "Paddle spawned. Owner: " +
+            Object.InputAuthority +
+            " Local: " +
+            Runner.LocalPlayer
+        );
+
         if (Object.HasInputAuthority)
         {
+            Debug.Log("I control this paddle");
             cam = Camera.main;
-            Debug.Log("I own this paddle");
         }
     }
 
@@ -21,17 +28,15 @@ public class PlayerPaddle : NetworkBehaviour
         if (!Object.HasInputAuthority)
             return;
 
-
-        Vector3 mousePosition =
-            cam.ScreenToWorldPoint(Input.mousePosition);
-
+        Vector3 mousePosition = cam.ScreenToWorldPoint(Input.mousePosition);
         mousePosition.z = 0;
-
 
         transform.position = Vector3.MoveTowards(
             transform.position,
             mousePosition,
             moveSpeed * Runner.DeltaTime
         );
+
+        Debug.Log("Paddle " + Object.InputAuthority +" Has Authority: " +Object.HasInputAuthority);
     }
 }
