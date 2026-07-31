@@ -10,6 +10,7 @@ using UnityEngine.SceneManagement;
 
 public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
 {
+    [SerializeField] private NetworkPrefabRef gameplayManagerPrefab;
     public static NetworkManager Instance;
     public NetworkRunner Runner;
     private bool matchStarting;
@@ -207,7 +208,18 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnSceneLoadDone(NetworkRunner runner)
     {
-        //throw new NotImplementedException();
+        Debug.Log("Scene loaded: " + runner.SceneManager);
+
+        if (!runner.IsServer)
+            return;
+
+        Debug.Log("Spawning GameplayManager");
+
+        runner.Spawn(
+            gameplayManagerPrefab,
+            Vector3.zero,
+            Quaternion.identity
+        );
     }
 
     public void OnSceneLoadStart(NetworkRunner runner)
