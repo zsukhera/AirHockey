@@ -163,9 +163,19 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
         //throw new NotImplementedException();
     }
 
-    public void OnInput(NetworkRunner runner, NetworkInput input)
-    {
-        //throw new NotImplementedException();
+    public void OnInput(NetworkRunner runner, NetworkInput input) 
+    { if (Camera.main == null) return; 
+        NetworkInputData data = new NetworkInputData(); 
+        bool mouseDown = Input.GetMouseButtonDown(0); 
+        bool mouseHeld = Input.GetMouseButton(0); 
+        bool mouseUp = Input.GetMouseButtonUp(0); 
+        data.dragStarted = mouseDown; 
+        data.isDragging = mouseHeld; data.dragEnded = mouseUp; 
+        Vector3 mouseScreenPosition = Input.mousePosition; 
+        mouseScreenPosition.z = Mathf.Abs(Camera.main.transform.position.z); 
+        Vector3 worldPosition = Camera.main.ScreenToWorldPoint(mouseScreenPosition); 
+        data.pointerWorldPosition = worldPosition; 
+        input.Set(data); 
     }
 
     public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input)

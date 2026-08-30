@@ -22,6 +22,31 @@ public class GameplayManager : NetworkBehaviour
         }
     }
 
+    private void SetupLocalCamera(PlayerRef localPlayer)
+    {
+        Camera cam = Camera.main;
+
+        if (cam == null)
+        {
+            Debug.LogError("GameplayManager: Main Camera not found.");
+            return;
+        }
+
+        if (localPlayer.PlayerId == 1)
+        {
+            // Player 1 sees the world normally.
+            cam.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+
+            Debug.Log("Camera set for Player 1 - normal orientation");
+        }
+        else
+        {
+            // Player 2 sees the world upside down.
+            cam.transform.rotation = Quaternion.Euler(0f, 0f, 180f);
+
+            Debug.Log("Camera set for Player 2 - mirrored orientation");
+        }
+    }
 
     private void SpawnPlayers()
     {

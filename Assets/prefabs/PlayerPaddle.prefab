@@ -195,7 +195,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2449151898819554820}
-  m_BodyType: 1
+  m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -263,4 +263,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fe5f00fca572384ab6221a8d7fe1419, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 10
+  dragSensitivity: 1
+  maxSpeed: 20
+  friction: 0.95
+  movementBoundsMin: {x: 0, y: 0}
+  movementBoundsMax: {x: 0, y: 0}
+  isTopPlayer: 0
