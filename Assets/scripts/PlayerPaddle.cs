@@ -1,15 +1,11 @@
+
 using Fusion;
 using UnityEngine;
 
 public class PlayerPaddle : NetworkBehaviour
 {
-    [Header("Input Settings")]
-    [SerializeField] private bool useTouchInput = false;
-
     [Header("Movement Settings")]
     [SerializeField] private float dragSensitivity = 1f;
-    [SerializeField] private float maxSpeed = 20f;
-    [SerializeField] private float friction = 0.95f;
 
     [Header("Bounds")]
     [SerializeField] private Vector2 movementBoundsMin;
@@ -24,26 +20,18 @@ public class PlayerPaddle : NetworkBehaviour
 
     private Rigidbody2D rb;
     private CircleCollider2D circleCollider;
-
-    // SpriteRenderer is on the child Circle object.
     private SpriteRenderer spriteRenderer;
-
-    private Vector2 currentVelocity;
 
     private bool isDragging;
 
     private Vector2 dragStartPos;
     private Vector2 dragStartWorldPos;
 
-    private Vector2 lastPosition;
-
 
     public override void Spawned()
     {
         rb = GetComponent<Rigidbody2D>();
         circleCollider = GetComponent<CircleCollider2D>();
-
-        // Find SpriteRenderer on the child Circle.
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
 
         if (rb == null)
@@ -59,7 +47,7 @@ public class PlayerPaddle : NetworkBehaviour
         if (spriteRenderer == null)
         {
             Debug.LogError(
-                "PlayerPaddle: SpriteRenderer not found on paddle or child objects."
+                "PlayerPaddle: SpriteRenderer not found."
             );
         }
 
@@ -71,7 +59,8 @@ public class PlayerPaddle : NetworkBehaviour
         );
 
 
-        // Assign visual color based on Fusion PlayerRef.
+        // Player 1 = Blue
+        // Player 2 = Red
         if (spriteRenderer != null)
         {
             if (Object.InputAuthority.PlayerId == 1)
@@ -89,34 +78,28 @@ public class PlayerPaddle : NetworkBehaviour
         {
             Debug.Log("I control this paddle");
         }
-
-        lastPosition = rb.position;
     }
 
 
     public override void FixedUpdateNetwork()
     {
+        // Only State Authority changes the networked paddle position.
         if (!Object.HasStateAuthority)
             return;
 
-        if (GetInput<NetworkInputData>(out NetworkInputData input))
+
+        if (!GetInput<NetworkInputData>(
+                out NetworkInputData input))
         {
-            HandleNetworkInput(input);
+            return;
         }
 
-        rb.velocity = currentVelocity;
 
-        currentVelocity *= friction;
-
-        lastPosition = rb.position;
-    }
-
-
-    private void HandleNetworkInput(NetworkInputData input)
-    {
+        // Start dragging
         if (input.dragStarted)
         {
-            Vector2 clickPosition = input.pointerWorldPosition;
+            Vector2 clickPosition =
+                input.pointerWorldPosition;
 
             if (IsClickOnPlayer(clickPosition))
             {
@@ -124,11 +107,17 @@ public class PlayerPaddle : NetworkBehaviour
             }
         }
 
+
+        // Continue dragging
         if (input.isDragging && isDragging)
         {
-            UpdateDrag(input.pointerWorldPosition);
+            UpdateDrag(
+                input.pointerWorldPosition
+            );
         }
 
+
+        // Release
         if (input.dragEnded && isDragging)
         {
             EndDrag();
@@ -143,8 +132,12 @@ public class PlayerPaddle : NetworkBehaviour
         dragStartWorldPos = clickPosition;
         dragStartPos = rb.position;
 
-        currentVelocity = Vector2.zero;
         rb.velocity = Vector2.zero;
+
+        Debug.Log(
+            "Started dragging paddle owned by " +
+            Object.InputAuthority
+        );
     }
 
 
@@ -154,9 +147,11 @@ public class PlayerPaddle : NetworkBehaviour
             currentWorldPos -
             dragStartWorldPos;
 
+
         Vector2 newPos =
             dragStartPos +
             dragDelta * dragSensitivity;
+
 
         newPos.x = Mathf.Clamp(
             newPos.x,
@@ -164,13 +159,15 @@ public class PlayerPaddle : NetworkBehaviour
             movementBoundsMax.x
         );
 
+
         newPos.y = Mathf.Clamp(
             newPos.y,
             movementBoundsMin.y,
             movementBoundsMax.y
         );
 
-        rb.position = newPos;
+
+        rb.MovePosition(newPos);
     }
 
 
@@ -178,19 +175,12 @@ public class PlayerPaddle : NetworkBehaviour
     {
         isDragging = false;
 
-        Vector2 positionDelta =
-            rb.position -
-            lastPosition;
+        rb.velocity = Vector2.zero;
 
-        currentVelocity =
-            positionDelta / Runner.DeltaTime;
-
-        if (currentVelocity.magnitude > maxSpeed)
-        {
-            currentVelocity =
-                currentVelocity.normalized *
-                maxSpeed;
-        }
+        Debug.Log(
+            "Stopped dragging paddle owned by " +
+            Object.InputAuthority
+        );
     }
 
 
@@ -199,11 +189,14 @@ public class PlayerPaddle : NetworkBehaviour
         if (circleCollider == null)
             return false;
 
+
         Vector2 offset =
             worldPos -
             rb.position;
 
-        return offset.magnitude <= circleCollider.radius;
+
+        return offset.magnitude <=
+               circleCollider.radius;
     }
 
 
@@ -213,7 +206,9 @@ public class PlayerPaddle : NetworkBehaviour
     }
 
 
-    public void SetBounds(Vector2 min, Vector2 max)
+    public void SetBounds(
+        Vector2 min,
+        Vector2 max)
     {
         movementBoundsMin = min;
         movementBoundsMax = max;
@@ -225,9 +220,9 @@ public class PlayerPaddle : NetworkBehaviour
         if (!Object.HasStateAuthority)
             return;
 
-        currentVelocity = Vector2.zero;
-        rb.velocity = Vector2.zero;
         isDragging = false;
+
+        rb.velocity = Vector2.zero;
     }
 
 
@@ -237,10 +232,9 @@ public class PlayerPaddle : NetworkBehaviour
             return;
 
         rb.position = startPos;
-        currentVelocity = Vector2.zero;
-        rb.velocity = Vector2.zero;
-        isDragging = false;
 
-        lastPosition = rb.position;
+        rb.velocity = Vector2.zero;
+
+        isDragging = false;
     }
 }
